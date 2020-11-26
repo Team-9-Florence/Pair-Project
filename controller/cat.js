@@ -1,7 +1,6 @@
 var petfinder = require("@petfinder/petfinder-js");
 var client = new petfinder.Client({apiKey: "Z4hOUq0YlGKIO3NQKvmBwGNIse6qEAY4KpNEbkaFsxkXO5zsN8", secret: "9MeWNNmCTIKYufj4tgtm3Iypr5mS8WzQ4MaddK35"});
 const axios = require("axios");
-const { response } = require("express");
 const { Cat } = require("../models")
 
 class CatController {
@@ -21,8 +20,7 @@ class CatController {
                 res.status(200).json(response.data)
             })
             .catch(err => {
-                res.status(500).json(err)
-                console.log(err)
+                next(err)
             })
     }
 
@@ -39,7 +37,7 @@ class CatController {
                 res.status(200).json(response.data)
             })
             .catch(err => {
-                res.status(500).json(err)
+                next(err)
             })
     }
 
@@ -50,7 +48,7 @@ class CatController {
                 // res.send(response.data.animals)
             })
             .catch(function (error) {
-                console.log(error)
+                next(error)
             });
     }
 
@@ -94,7 +92,7 @@ class CatController {
                 res.status(201).json({msg: "SuccessCreated"})
             })
             .catch(function (error) {
-                console.log(error)
+                next(error)
             });
     }
 
@@ -105,7 +103,7 @@ class CatController {
                 res.status(200).json("DataDeleted")
             })
             .catch(err => {
-                res.status(500).json(err)
+                next(err)
             })
     }
 }
