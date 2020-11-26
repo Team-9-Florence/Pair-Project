@@ -54,6 +54,7 @@ class CatController {
 
     static adoptCats(req, res, next) {
         const id = +req.params.id
+        const idUser = req.userLogin.id
         // console.log(id)
         
         client.animal.search({type: "Cat"})
@@ -84,7 +85,7 @@ class CatController {
                     address: response.contact.address.address1,
                     city: response.contact.address.city,
                     country: response.contact.address.country,
-                    UserId: null
+                    UserId: idUser
                 }
                 return Cat.create(catAdopt)
             })

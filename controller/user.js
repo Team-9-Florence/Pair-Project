@@ -32,14 +32,14 @@ class UserController{
       if (!data) {
         throw {
           status : 401,
-          message: `invalid email`
+          message: `invalid email/password`
         }
       } else {
         const compared = compare(obj.password, data.password)
         if (!compared) {
           throw {
             status : 401,
-            message: `invalid password`
+            message: `invalid email/password`
           }
         } else {
           let obj = {
