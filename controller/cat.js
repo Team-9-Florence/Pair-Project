@@ -4,43 +4,42 @@ const axios = require("axios");
 const { Cat } = require("../models")
 
 class CatController {
-    static getPhotoCats(req, res, next) {
-        axios({
-            method: "GET",
-            url: "https://api.thecatapi.com/v1/images/search",
-            params: {
-                limit: 10,
-                order: "DESC"
-            },
-            headers: {
-                "x-api-key": "39d99eae-9d1d-4419-9803-bf565658ae6b"
-            }
-        })
-            .then(response => {
-                res.status(200).json(response.data)
-            })
-            .catch(err => {
-                next(err)
-            })
-    }
+    // static getPhotoCats(req, res, next) {
+    //     axios({
+    //         method: "GET",
+    //         url: "https://api.thecatapi.com/v1/images/search",
+    //         params: {
+    //             limit: 10,
+    //             order: "DESC"
+    //         },
+    //         headers: {
+    //             "x-api-key": "39d99eae-9d1d-4419-9803-bf565658ae6b"
+    //         }
+    //     })
+    //         .then(response => {
+    //             res.status(200).json(response.data)
+    //         })
+    //         .catch(err => {
+    //             next(err)
+    //         })
+    // }
 
-
-    static getCatFacts(req, res, next) {
-        axios({
-            url: "https://cat-fact.herokuapp.com/facts/random",
-            method: "GET",
-            params: {
-                "animal_type": "cat",
-                amount: 10
-            }
-        })
-            .then(response => {
-                res.status(200).json(response.data)
-            })
-            .catch(err => {
-                next(err)
-            })
-    }
+    // static getCatFacts(req, res, next) {
+    //     axios({
+    //         url: "https://cat-fact.herokuapp.com/facts/random",
+    //         method: "GET",
+    //         params: {
+    //             "animal_type": "cat",
+    //             amount: 10
+    //         }
+    //     })
+    //         .then(response => {
+    //             res.status(200).json(response.data)
+    //         })
+    //         .catch(err => {
+    //             next(err)
+    //         })
+    // }
 
     // Tambah Baru
     static getPetFinderById(req, res, next) {
@@ -162,6 +161,46 @@ class CatController {
         Cat.destroy({where: { id }})
             .then(data => {
                 res.status(200).json("DataDeleted")
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+
+    static getCatsFact(req, res, next) {
+        let arr = []
+        axios({
+            method: "GET",
+            url: "https://api.thecatapi.com/v1/images/search",
+            params: {
+                limit: 10,
+                order: "DESC"
+            },
+            headers: {
+                "x-api-key": "39d99eae-9d1d-4419-9803-bf565658ae6b"
+            }
+        })
+            .then(response => {
+                for (let i = 0; i < response.data.length; i++) {
+                    let temp = {
+                        url : response.data[i].url
+                    }
+                    arr.push(temp)
+                }
+                return axios({
+                    url: "https://cat-fact.herokuapp.com/facts/random",
+                    method: "GET",
+                    params: {
+                        "animal_type": "cat",
+                        amount: 10
+                    }
+                })
+            })
+            .then(response => {
+                for (let i = 0; i < arr.length; i++) {
+                    arr[i].text = response.data[i].text
+                }
+                res.status(200).json(arr)
             })
             .catch(err => {
                 next(err)

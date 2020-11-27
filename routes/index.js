@@ -15,7 +15,8 @@ router.post('/login', UserController.login)
 router.post('/googleLogin', UserController.googleLogin)
 
 router.use(authentication)
-router.get("/catsphoto", CatController.getPhotoCats)
-router.get("/catsfact", CatController.getCatFacts)
+router.get("/catsphoto", CatController.getCatsFact)
+// router.get("/catsphoto", CatController.getPhotoCats)
+// router.get("/catsfact", CatController.getCatFacts)
 
 module.exports = router
