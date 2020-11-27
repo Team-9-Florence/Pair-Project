@@ -42,6 +42,27 @@ class CatController {
             })
     }
 
+    // Tambah Baru
+    static getPetFinderById(req, res, next) {
+        const id = +req.params.id
+        // console.log(id)
+        
+        let cat = null
+        client.animal.search({type: "Cat"})
+            .then(function (response) {
+                for (let i = 0; i < response.data.animals.length; i++) {
+                        if(response.data.animals[i].id === id) {
+                            cat = response.data.animals[i]
+                            // console.log(cat)
+                            res.status(200).json(cat)
+                        }
+                    }
+                })
+            .catch(function (error) {
+                next(error)
+            });
+    }
+
     static getPetFinder(req, res,next) {
         client.animal.search({limit: 10, type: "Cat"})
             .then(function (response) {
