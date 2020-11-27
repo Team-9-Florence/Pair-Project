@@ -9,7 +9,7 @@ class CatController {
             method: "GET",
             url: "https://api.thecatapi.com/v1/images/search",
             params: {
-                limit: 5,
+                limit: 10,
                 order: "DESC"
             },
             headers: {
@@ -24,13 +24,14 @@ class CatController {
             })
     }
 
+
     static getCatFacts(req, res, next) {
         axios({
             url: "https://cat-fact.herokuapp.com/facts/random",
             method: "GET",
             params: {
                 "animal_type": "cat",
-                amount: 5
+                amount: 10
             }
         })
             .then(response => {
@@ -47,8 +48,8 @@ class CatController {
                 res.status(200).json(response.data.animals)
                 // res.send(response.data.animals)
             })
-            .catch(function (error) {
-                next(error)
+            .catch(function (err) {
+                next(err)
             });
     }
 
@@ -95,6 +96,44 @@ class CatController {
             .catch(function (error) {
                 next(error)
             });
+    }
+
+    static getCatAdopt(req, res, next) {
+        Cat.findAll()
+            .then(data => {
+                if (data) {
+                    res.status(200).json(data)
+                } else {
+                    throw{
+                        status: 404,
+                        message: "DataNotFound"
+                    }
+                }
+            })
+            .catch(err => {
+                next(err)
+                // res.status(500).json(err)
+            })
+    }
+
+    static getCatInfo(req, res, next) {
+        const id = +req.params.id
+        Cat.findOne({where: { id }})
+            .then(data => {
+                if(data) {
+                    res.status(200).json(data)
+                } else {
+                    throw{
+                        status: 404,
+                        message: "DataNotFound"
+                    }
+                }
+
+            })
+            .catch(err => {
+                next(err)
+                // res.status(500).json(err)
+            })
     }
 
     static deleteCats(req, res, next) {
